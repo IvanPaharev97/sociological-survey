@@ -12,6 +12,10 @@
   	<welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
   
+  <listener>
+        <listener-class>com.epam.training.survey.controller.listener.ServletListener</listener-class>
+  </listener>
+  
   <servlet>
   	<description></description>
   	<display-name>LoginServlet</display-name>
