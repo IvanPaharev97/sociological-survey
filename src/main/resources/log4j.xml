@@ -5,7 +5,7 @@
         <param name="append" value="true"/>
         <param name="maxFileSize" value="200KB"/>
         <param name="maxBackupIndex" value="5"/>
-        <param name="file" value="logs/infoLog.log"/>
+        <param name="file" value="C:/Program Files/Eclipse/Neon/eclipse/workspace/sociological-survey/infoLog.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
                    value="%d{dd.MM.yyyy HH:mm:ss} %-5p %t %c{1}:%M:%L - %m%n"/>
@@ -20,7 +20,7 @@
         <param name="append" value="true"/>
         <param name="maxFileSize" value="1MB"/>
         <param name="maxBackupIndex" value="5"/>
-        <param name="file" value="logs/warnLog.log"/>
+        <param name="file" value="C:/Program Files/Eclipse/Neon/eclipse/workspace/sociological-survey/warnLog.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
                    value="%d{dd.MM.yyyy HH:mm:ss} %-5p %t %c{1}:%M:%L - %m%n"/>
@@ -36,7 +36,7 @@
         <param name="append" value="true"/>
         <param name="maxFileSize" value="200KB"/>
         <param name="maxBackupIndex" value="5"/>
-        <param name="file" value="logs/errorLog.log"/>
+        <param name="file" value="C:/Program Files/Eclipse/Neon/eclipse/workspace/sociological-survey/errorLog.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern"
                    value="%d{dd.MM.yyyy HH:mm:ss} %-5p %t %c{1}:%M:%L - %m%n"/>

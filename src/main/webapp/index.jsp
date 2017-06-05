@@ -7,6 +7,7 @@
 	</head>
 	<body>
 		<form action="LoginServlet" method="post">
+			<input type="hidden" name="command" value="login" />
 			<span>Login:</span>
 			<input type="text" name="login" value="" />
 			<span>Password:</span>

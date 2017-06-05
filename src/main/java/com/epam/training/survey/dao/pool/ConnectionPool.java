@@ -87,7 +87,7 @@ public class ConnectionPool {
         }
     }
 
-    public void dispose() throws ConnectionPoolException {
+    public void destroy() throws ConnectionPoolException {
         try {
             lock.lock();
             if(isInit){

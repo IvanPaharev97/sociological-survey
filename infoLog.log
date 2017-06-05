@@ -1,0 +1,7 @@
+04.06.2017 23:15:20 INFO  localhost-startStop-2 ConnectionPool:init:53 - Connection pool was successfully initialized
+04.06.2017 23:15:20 INFO  localhost-startStop-2 ConnectionPool:destroy:103 - Connection pool was successfully destroyed
+04.06.2017 23:15:22 INFO  localhost-startStop-1 ConnectionPool:init:53 - Connection pool was successfully initialized
+04.06.2017 23:19:05 INFO  localhost-startStop-2 ConnectionPool:init:53 - Connection pool was successfully initialized
+04.06.2017 23:19:08 INFO  localhost-startStop-2 ConnectionPool:destroy:103 - Connection pool was successfully destroyed
+04.06.2017 23:19:11 INFO  localhost-startStop-1 ConnectionPool:init:53 - Connection pool was successfully initialized
+04.06.2017 23:20:41 INFO  localhost-startStop-2 ConnectionPool:destroy:103 - Connection pool was successfully destroyed

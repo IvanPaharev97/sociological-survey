@@ -80,7 +80,9 @@ public class MySqlUserDao extends MySqlBaseDao<User> implements UserDao {
             PreparedStatement statement = connection.prepareStatement(SELECT_USER_BY_EMAIL);
             statement.setString(1, email);
             List<User> users = parseResultSet(statement.executeQuery());
-            user = users.get(0);
+            if (!users.isEmpty()) {
+                user = users.get(0);
+            }
             connection.commit();
         } catch (SQLException e) {
             log.error("Error while executing SQL query: " + SELECT_USER_BY_EMAIL + ", exception: ", e);
