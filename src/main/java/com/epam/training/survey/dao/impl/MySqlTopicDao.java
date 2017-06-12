@@ -11,29 +11,29 @@ import com.epam.training.survey.dao.TopicDao;
 import com.epam.training.survey.dao.exception.ConnectionPoolException;
 import com.epam.training.survey.dao.exception.DaoException;
 import com.epam.training.survey.dao.pool.ConnectionPool;
+import com.epam.training.survey.dao.query.Query;
+import com.epam.training.survey.dao.query.constant.QueryPart;
+import com.epam.training.survey.dao.query.constant.QuestionTable;
+import com.epam.training.survey.dao.query.constant.TopicTable;
 import com.epam.training.survey.entity.Topic;
 
 import lombok.extern.log4j.Log4j;
 
 @Log4j
 public class MySqlTopicDao extends MySqlBaseDao<Topic> implements TopicDao {
-    private static final String INSERT_TOPIC = "INSERT INTO topic(name, description) VALUES(?, ?);";
-    private static final String UPDATE_TOPIC = "UPDATE topic SET name = ?, description = ? WHERE id = ?;";
-    private static final String DELETE_TOPIC = "DELETE FROM topic WHERE id = ?;";
-    private static final String SELECT_ALL_TOPICS = "SELECT * FROM topic";
-    private static final String SELECT_TOPIC_BY_ID = "SELECT * FROM topic WHERE id = ?;";
-    private static final String SELECT_QUESTION_TOPIC = "SELECT * FROM topic "
-            + "JOIN question ON topic.id = question.topic_id "
-            + "WHERE question.id = ?;";
     
     @Override
-    public Topic getQuestionTopic(int topic_id) throws DaoException {
+    public Topic getQuestionTopic(int question_id) throws DaoException {
         Topic topic = null;
         Connection connection = null;
+        Query query = new Query(QueryPart.SELECT_START, TopicTable.TABLE_NAME);
+        query
+            .joinTable(TopicTable.JOIN_QUESTION_TABLE)
+            .whereEquals(QuestionTable.ID_FIELD);
         try {
             connection = ConnectionPool.getInstance().getConnection();
-            PreparedStatement statement = connection.prepareStatement(SELECT_QUESTION_TOPIC);
-            statement.setInt(1, topic_id);
+            PreparedStatement statement = connection.prepareStatement(query.getResultQuery());
+            statement.setInt(1, question_id);
             ResultSet rs = statement.executeQuery();
             int count = 0;
             while (rs.next()) {
@@ -48,7 +48,7 @@ public class MySqlTopicDao extends MySqlBaseDao<Topic> implements TopicDao {
             }
             connection.commit();
         } catch (SQLException e) {
-            log.error("Error while executing SQL query: " + SELECT_QUESTION_TOPIC + ", exception: ", e);
+            log.error("Error while executing SQL query: " + query.getResultQuery() + ", exception: ", e);
             throw new DaoException(e);
         } catch (ConnectionPoolException e) {
             log.error("Exception while getting connection: ", e);
@@ -98,26 +98,36 @@ public class MySqlTopicDao extends MySqlBaseDao<Topic> implements TopicDao {
 
     @Override
     protected String getSelectAllQuery() {
-        return SELECT_ALL_TOPICS;
+        Query query = new Query(QueryPart.SELECT_START, TopicTable.TABLE_NAME);
+        return query.getResultQuery();
     }
     
     @Override
     protected String getSelectByIdQuery() {
-        return SELECT_TOPIC_BY_ID;
+        Query query = new Query(QueryPart.SELECT_START, TopicTable.TABLE_NAME);
+        query.whereEquals(TopicTable.ID_FIELD);
+        return query.getResultQuery();
     }
 
     @Override
     protected String getInsertQuery() {
-        return INSERT_TOPIC;
+        Query query = new Query(QueryPart.INSERT_START, TopicTable.TABLE_NAME);
+        query.setCreateOrUpdateBody(TopicTable.INSERT_BODY);
+        return query.getResultQuery();
     }
 
     @Override
     protected String getUpdateQuery() {
-        return UPDATE_TOPIC;
+        Query query = new Query(QueryPart.UPDATE_START, TopicTable.TABLE_NAME);
+        query.setCreateOrUpdateBody(TopicTable.UPDATE_BODY);
+        query.whereEquals(TopicTable.ID_FIELD);
+        return query.getResultQuery();
     }
     
     @Override
     protected String getDeleteQuery() {
-        return DELETE_TOPIC;
+        Query query = new Query(QueryPart.DELETE_START, TopicTable.TABLE_NAME);
+        query.whereEquals(TopicTable.ID_FIELD);
+        return query.getResultQuery();
     }
 }

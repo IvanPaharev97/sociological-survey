@@ -10,7 +10,6 @@ import com.epam.training.survey.dao.BaseDao;
 import com.epam.training.survey.dao.exception.ConnectionPoolException;
 import com.epam.training.survey.dao.exception.DaoException;
 import com.epam.training.survey.dao.pool.ConnectionPool;
-
 import lombok.extern.log4j.Log4j;
 
 @Log4j
@@ -93,7 +92,6 @@ public abstract class MySqlBaseDao<E> implements BaseDao<E> {
   
     @Override
     public E persist(E entity) throws DaoException {
-        E persistInstance = null;
         Connection connection = null;
         try {
             connection = ConnectionPool.getInstance().getConnection();
@@ -104,13 +102,13 @@ public abstract class MySqlBaseDao<E> implements BaseDao<E> {
                 throw new DaoException("On persist modify more then 1 record: " + count);
             }
             connection.commit();
-            statement = connection.prepareStatement(getSelectAllQuery() + " WHERE id = last_insert_id();"); 
+            statement = connection.prepareStatement(getSelectAllQuery().replaceAll(";", "") + " WHERE id = last_insert_id();"); 
             ResultSet rs = statement.executeQuery();
             List<E> list = parseResultSet(rs);
             if ((list == null) || (list.size() != 1)) {
                 throw new DaoException("Exception on findByPK new persist data.");
             }
-            persistInstance = list.iterator().next();
+            entity = list.iterator().next();
         } catch (SQLException e) {
             log.error("Error while executing SQL query: " + getInsertQuery() + ", exception: ", e);
             throw new DaoException(e);
@@ -126,7 +124,7 @@ public abstract class MySqlBaseDao<E> implements BaseDao<E> {
                 }
             }
         }
-        return persistInstance;
+        return entity;
     }
 
     @Override
@@ -170,7 +168,7 @@ public abstract class MySqlBaseDao<E> implements BaseDao<E> {
             statement.setInt(1, id);
             result = statement.executeUpdate();
             if (result != 1) {
-                throw new DaoException("On delete modify more then 1 record: " + result);
+                throw new DaoException("On delete modify more or less then 1 record: " + result);
             }
             connection.commit();
         } catch (SQLException e) {
